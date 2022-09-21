@@ -2,23 +2,23 @@ import React from "react";
 import './Modal.css';
 
 const Modal = ({value, dealModal}) => {
-  // const { title,thumbnail, author, content } = value;
+  const { title,thumbnail, author, content } = value;
   return (
     <div id="modal">
       <div className="top-bar">
-      <i onClick={dealModal} className="fa-solid fa-xmark"></i>
+      <i onClick={dealModal} className="ri-close-line"></i>
       </div>
       <div className="image-container">
-        <img src='' alt="img"></img>
+        <img src={thumbnail.large} alt="img"></img>
       </div>
       <div className="details">
-        <h5>sddsdfg</h5>
+        <h5>{title}</h5>
       
-        <p>sfgsdfg</p>
+        <p>{content}</p>
       </div>
       <div className="author">
-      <img src='' alt="Img"></img>
-        <p>asdfasdf : asdfasdf</p>
+      <img src={author.avatar} alt="Img"></img>
+        <p>{author.name} : {author.role}</p>
       </div>
     </div>
   );

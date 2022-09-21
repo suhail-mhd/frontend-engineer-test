@@ -1,111 +1,49 @@
-import React, { useState, useEffect } from 'react'
-import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import Modal from "../Components/Modal/Modal";
+import React from "react";
+import { useEffect, useState } from "react";
 import "./Home.css";
+import axios from "axios";
+import Card from "../Components/Card/Card";
+// import Grid from '@mui/material/Grid';
 
-function Home({value}) {
-  console.log(value, "the props is");
+const Home = () => {
+  const [theData, setTheData] = useState([]);
 
-  const [data,setData] = useState([]);
-  const [state, setState] = useState(false);
-  const [modal, setModal] = useState(false);
+  useEffect(() => {
+    const findData = async () => {
+      try {
+        const response = await axios.get(
+          "https://my-json-server.typicode.com/Codeinwp/front-end-internship-api/posts"
+        );
+        setTheData(response.data);
+        console.log("axios response is this", response.data);
+    
+     
+      } catch (err) {
+        console.log(err);
+      }
+    };
 
-  const date = new Date(1606311631)
-  const dateString = new Date(date * 1000).toLocaleDateString("en", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
+    findData();
+  }, []);
+
+  const cardData = theData.map((data) => {
+    return <Card key={data.id} value={data} />;
+    
   });
 
-  const dealSwitch = ()=>{
-setState(!state);
+ 
 
-  };
-  const dealModal = ()=>{
-setModal(!modal);
-  }
-
-  useEffect(()=>{
-    axios.get('https://my-json-server.typicode.com/Codeinwp/front-end-internship-api/posts').then((res)=>{
-      // console.log(res.data);
-      setData(res.data)
-    })
-  },[])
-
-
-  console.log(data);
+console.log("data obtained after mapping",cardData);
   return (
-    <div>
-       <Grid container item md={6} lg={12} sm={12} style={{marginTop:100, marginBottom:100}}>
-      
-
-      {
-        data.map((obj)=>{
-          return(
-            <Card key={obj.id} id='card' sx={{ maxWidth: 545 }} style={{marginLeft:'40px',marginTop:'10px',marginBottom:20,width:'400'}}>
-            <CardMedia className='CardImg'
-              component="img"
-              height="250"
-              image={obj.thumbnail.small}
-              alt="green iguana"
-            />
-             <span>
-                  <a className="button" onClick={dealModal} type="button" >
-                    Learn More
-                  </a>
-                </span>
-            
-            <CardContent style={{padding:30}}>
-            <div style={{marginBottom:6}}>
-            <i style={{color:"#3B9AE1", marginRight:3}} class="ri-checkbox-blank-circle-fill"></i>
-            <i style={{color:"#FFCB42"}} class="ri-checkbox-blank-circle-fill"></i>
-            </div>
-              <Typography gutterBottom variant="h5" component="div" style={{fontWeight:"bold"}}>
-                {obj.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" style={{marginTop:30, marginBottom:20}}>
-                {obj.content}
-              </Typography>
-            </CardContent>
-            <CardContent style={{display:"flex", justifyContent:"space-between", paddingLeft:30, paddingRight:30}}>
-              <Typography gutterBottom variant="body2" component="div"  color="text.secondary">
-                {obj.author.name} - {obj.author.role}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {dateString}
-              </Typography>
-            </CardContent>
-            <div className="learn-more">
-        <a className="button" type="button">
-          Learn more
-        </a>
+    <div className="container">
+      <div className="grid">
+      {/* <Grid container item md={6} lg={12} sm={12} style={{marginTop:100, marginBottom:100}}> */}
+        {/* mapping of the data should be here */}
+        {cardData}
+        {/* </Grid> */}
       </div>
-
-      
-
-      {
-        modal && (
-            <div className="backdrop">
-                 <Modal data={value} dealModal={dealModal}/>
-      </div>
-        )
-     }
-          </Card>
-
-          
-          )
-        })
-      }
-       
-
-       </Grid>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
