@@ -5,10 +5,28 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
+import Modal from "../Components/Modal/Modal";
 
 function Home() {
 
   const [data,setData] = useState([]);
+  // const [state, setState] = useState(false);
+  // const [modal, setModal] = useState(false);
+
+  const date = new Date(1606311631)
+  const dateString = new Date(date * 1000).toLocaleDateString("en", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
+//   const dealSwitch = ()=>{
+// setState(!state);
+
+//   };
+//   const dealModal = ()=>{
+// setModal(!modal);
+//   }
 
   useEffect(()=>{
     axios.get('https://my-json-server.typicode.com/Codeinwp/front-end-internship-api/posts').then((res)=>{
@@ -52,7 +70,7 @@ function Home() {
                 {obj.author.name} - {obj.author.role}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {obj.date}
+                {dateString}
               </Typography>
             </CardContent>
           </Card>
