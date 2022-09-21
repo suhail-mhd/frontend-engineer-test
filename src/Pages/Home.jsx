@@ -6,12 +6,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import axios from 'axios';
 import Modal from "../Components/Modal/Modal";
+import "./Home.css";
 
-function Home() {
+function Home({value}) {
+  console.log(value, "the props is");
 
   const [data,setData] = useState([]);
-  // const [state, setState] = useState(false);
-  // const [modal, setModal] = useState(false);
+  const [state, setState] = useState(false);
+  const [modal, setModal] = useState(false);
 
   const date = new Date(1606311631)
   const dateString = new Date(date * 1000).toLocaleDateString("en", {
@@ -20,13 +22,13 @@ function Home() {
     day: "numeric",
   });
 
-//   const dealSwitch = ()=>{
-// setState(!state);
+  const dealSwitch = ()=>{
+setState(!state);
 
-//   };
-//   const dealModal = ()=>{
-// setModal(!modal);
-//   }
+  };
+  const dealModal = ()=>{
+setModal(!modal);
+  }
 
   useEffect(()=>{
     axios.get('https://my-json-server.typicode.com/Codeinwp/front-end-internship-api/posts').then((res)=>{
@@ -45,13 +47,18 @@ function Home() {
       {
         data.map((obj)=>{
           return(
-            <Card sx={{ maxWidth: 545 }} style={{marginLeft:'40px',marginTop:'10px',marginBottom:20,width:'400'}}>
+            <Card key={obj.id} id='card' sx={{ maxWidth: 545 }} style={{marginLeft:'40px',marginTop:'10px',marginBottom:20,width:'400'}}>
             <CardMedia className='CardImg'
               component="img"
               height="250"
               image={obj.thumbnail.small}
               alt="green iguana"
             />
+             <span>
+                  <a className="button" onClick={dealModal} type="button" >
+                    Learn More
+                  </a>
+                </span>
             
             <CardContent style={{padding:30}}>
             <div style={{marginBottom:6}}>
@@ -73,7 +80,24 @@ function Home() {
                 {dateString}
               </Typography>
             </CardContent>
+            <div className="learn-more">
+        <a className="button" type="button">
+          Learn more
+        </a>
+      </div>
+
+      
+
+      {
+        modal && (
+            <div className="backdrop">
+                 <Modal data={value} dealModal={dealModal}/>
+      </div>
+        )
+     }
           </Card>
+
+          
           )
         })
       }
